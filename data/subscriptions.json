@@ -1,0 +1,137 @@
+[
+  {
+    "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567891",
+    "title": "Netflix Premium",
+    "amount": 15.99,
+    "currency": "USD",
+    "category": "subscription",
+    "next_payment_date": "2026-07-25",
+    "status": "active"
+  },
+  {
+    "id": "b2c3d4e5-f6a7-8901-bcde-f12345678912",
+    "title": "Spotify Family",
+    "amount": 16.99,
+    "currency": "EUR",
+    "category": "entertainment",
+    "next_payment_date": "2026-07-28",
+    "status": "active"
+  },
+  {
+    "id": "c3d4e5f6-a7b8-9012-cdef-123456789123",
+    "title": "Fitnes Club",
+    "amount": 4500.00,
+    "currency": "RUB",
+    "category": "health",
+    "next_payment_date": "2026-07-20",
+    "status": "active"
+  },
+  {
+    "id": "d4e5f6a7-b8c9-0123-defa-234567891234",
+    "title": "Adobe Creative Cloud",
+    "amount": 54.99,
+    "currency": "USD",
+    "category": "software",
+    "next_payment_date": "2026-08-01",
+    "status": "active"
+  },
+  {
+    "id": "e5f6a7b8-c9d0-1234-efab-345678912345",
+    "title": "iCloud Plus",
+    "amount": 2.99,
+    "currency": "USD",
+    "category": "utility",
+    "next_payment_date": "2026-07-22",
+    "status": "active"
+  },
+  {
+    "id": "f6a7b8c9-d0e1-2345-fabc-456789123456",
+    "title": "Windows 11 Pro",
+    "amount": 199.00,
+    "currency": "USD",
+    "category": "software",
+    "next_payment_date": "2026-09-10",
+    "status": "active"
+  },
+  {
+    "id": "a7b8c9d0-e1f2-3456-abcd-567891234567",
+    "title": "Domain Name .ru",
+    "amount": 150.00,
+    "currency": "RUB",
+    "category": "utility",
+    "next_payment_date": "2026-07-19",
+    "status": "active"
+  },
+  {
+    "id": "b8c9d0e1-f2a3-4567-bcde-678912345678",
+    "title": "AWS Hosting",
+    "amount": 12.50,
+    "currency": "USD",
+    "category": "utility",
+    "next_payment_date": "2026-07-30",
+    "status": "active"
+  },
+  {
+    "id": "c9d0e1f2-a3b4-5678-cdef-789123456789",
+    "title": "YouTube Premium",
+    "amount": 17.99,
+    "currency": "GBP",
+    "category": "entertainment",
+    "next_payment_date": "2026-07-21",
+    "status": "active"
+  },
+  {
+    "id": "d0e1f2a3-b4c5-6789-defa-891234567890",
+    "title": "Car Insurance (Annual)",
+    "amount": 1200.00,
+    "currency": "EUR",
+    "category": "utility",
+    "next_payment_date": "2026-08-15",
+    "status": "inactive"
+  },
+  {
+    "id": "e1f2a3b4-c5d6-7890-efab-912345678901",
+    "title": "Medical Insurance",
+    "amount": 350.00,
+    "currency": "USD",
+    "category": "health",
+    "next_payment_date": "2026-08-07",
+    "status": "paused"
+  },
+  {
+    "id": "f2a3b4c5-d6e7-8901-fabc-012345678902",
+    "title": "Habr Pro",
+    "amount": 299.00,
+    "currency": "RUB",
+    "category": "entertainment",
+    "next_payment_date": "2026-07-24",
+    "status": "active"
+  },
+  {
+    "id": "a3b4c5d6-e7f8-9012-abcd-123456789023",
+    "title": "Fresh Coffee Box",
+    "amount": 25.00,
+    "currency": "USD",
+    "category": "subscription",
+    "next_payment_date": "2026-07-18",
+    "status": "active"
+  },
+  {
+    "id": "b4c5d6e7-f8a9-0123-bcde-234567890134",
+    "title": "Premium Gym",
+    "amount": 5500.00,
+    "currency": "RUB",
+    "category": "health",
+    "next_payment_date": "2026-07-20",
+    "status": "inactive"
+  },
+  {
+    "id": "c5d6e7f8-a9b0-1234-cdef-345678901245",
+    "title": "Japanese SaaS",
+    "amount": 5000.00,
+    "currency": "JPY",
+    "category": "software",
+    "next_payment_date": "2026-07-27",
+    "status": "active"
+  }
+]
