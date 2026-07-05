@@ -2,8 +2,24 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 import json
 import requests
+import numexpr
 from typing import Optional
 from langchain_core.tools import tool
+
+@tool
+def calculator(expression: str) -> str:
+    """
+    Кулькулятор. Инструмент для вычисления математических выражений
+    Args:
+        expression: математическое выражение (например '2+2')
+    Returns:
+        Строка в формате JSON с полями:
+            `answer`: ответ на математичесоке выражение
+    """
+    try:
+        return json.dumps({'answer': str(numexpr.evaluate(expression))})
+    except Exception as e:
+        return json.dumps({'error': 'Ошибка вычислений'}, ensure_ascii=False)
 
 
 @tool
@@ -23,19 +39,18 @@ def get_current_time(timezone: str = 'UTC') -> str:
         result = {'date': now.strftime('%Y-%m-%d'), 'time': now.strftime('%H:%M:%S')}
         return json.dumps(result, ensure_ascii=False)
     except Exception:
-        return json.dumps({'error': 'Ошибка Получения текущего времени'}, ensure_ascii=False)
+        return json.dumps({'error': 'Ошибка получения текущего времени'}, ensure_ascii=False)
 
 
 @tool
-def get_obligations(status=Optional[str], category=Optional[str]) -> str:
+def get_obligations(currency=Optional[str],
+                    category=Optional[str],
+                    lower_date=Optional[str], upper_date=Optional[str],
+                    status=Optional[str]) -> str:
     """
     Возвращает список финансовых обязательств пользователя.
     Args:
-        `status`: статус платежа (может принимать значения: 
-                                            `active` - платеж запланирован и активен;
-                                            `inactive` - платеж неактивен;
-                                            `paused` - использование данной подписки приостановлено на текущий момент
-                                            )
+        `currency`: название валюты, в которой принимается оплата (например 'USD' или 'RUB')
         `category`: категория сервиса, товара или услуги (может принимать значения:
                                                             `subscription` - подписка на сервис;
                                                             `sport` - спорт;
@@ -43,8 +58,15 @@ def get_obligations(status=Optional[str], category=Optional[str]) -> str:
                                                             `software` - программное обеспечение;
                                                             `utility` - служебная программаж
                                                             `vehicle` - автомобиль)
+        `lower_date`: нижняя граница даты, по которой нужно вести поиск в формате YYYY-MM-DD
+        `upper_date`: верхняя граница даты, по которой нужно вести поиск в формате YYYY-MM-DD
+        `status`: статус платежа (может принимать значения: 
+                                    `active` - платеж запланирован и активен;
+                                    `inactive` - платеж неактивен;
+                                    `paused` - использование данной подписки приостановлено на текущий момент
+                                    )
     Returns:
-        Список со строкми в формате JSON с полями:
+        Список со строками в формате JSON с полями:
             `id`: id операции
             `title`: название сервиса, товара или услуги
             `amount`: цена сервиса, товара или услуги
@@ -58,23 +80,50 @@ def get_obligations(status=Optional[str], category=Optional[str]) -> str:
     except Exception as e:
         return json.dumps({'error': 'Ошибка чтений файла с данными'}, ensure_ascii=False)
     
-    try:
-        if status is not None and category is not None:
-            for record in data:
-                if record['status'] == status and record['category'] == category:
-                    result.append(record)
-        elif status is None and category is not None:
-            for record in data:
-                if record['category'] == category:
-                    result.append(record)     
-        elif status is not None and category is None:
-            for record in data:
-                if record['status'] == status:
-                    result.append(record)
-    except Exception as e:
-        return json.dumps({'error': 'Ошибка фильтрования данных'}, ensure_ascii=False)
-                
-    return result
+    # Создаем копию данных для фильтрации
+    result = data.copy()
+    
+    # Фильтр по статусу (обычно мало уникальных значений)
+    if status is not None:
+        result = [item for item in result if item.get('status') == status]
+        if not result:
+            return json.dumps([], ensure_ascii=False)
+    
+    # Фильтр по категории
+    if category is not None:
+        result = [item for item in result if item.get('category') == category]
+        if not result:
+            return json.dumps([], ensure_ascii=False)
+    
+    # Фильтр по валюте
+    if currency is not None:
+        result = [item for item in result if item.get('currency') == currency]
+        if not result:
+            return json.dumps([], ensure_ascii=False)
+    
+    # Фильтр по дате (диапазон)
+    if lower_date is not None or upper_date is not None:
+        filtered_by_date = []
+        for item in result:
+            payment_date = item.get('next_payment_date', '')
+            if not payment_date:
+                continue
+            
+            # Проверяем нижнюю границу
+            if lower_date is not None and payment_date < lower_date:
+                continue
+            
+            # Проверяем верхнюю границу
+            if upper_date is not None and payment_date > upper_date:
+                continue
+            
+            filtered_by_date.append(item)
+        
+        result = filtered_by_date
+        if not result:
+            return json.dumps([], ensure_ascii=False)
+    
+    return json.dumps(result, ensure_ascii=False)
 
 @tool
 def convert_currency(amount: float, from_currency: str, to_currency: str) -> str:
@@ -104,7 +153,7 @@ def convert_currency(amount: float, from_currency: str, to_currency: str) -> str
     if to_currency_value is None:
         return json.dumps({'error': 'Ошибка получения данных'}, ensure_ascii=False)
     
-    return json.dumps({'need_currency_amount': to_currency_value * amount}, ensure_ascii=False)
+    return json.dumps({'need_currency_amount': str(to_currency_value * amount)}, ensure_ascii=False)
 
 
-tools_list = [get_current_time, get_obligations, convert_currency]
+tools_list = [calculator, get_current_time, get_obligations, convert_currency]
