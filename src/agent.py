@@ -6,7 +6,7 @@ from langgraph.prebuilt import ToolNode
 
 from config.system_prompt import SYSTEM_PROMPT
 from config.settings import settings
-from tools import tools_list
+from src.tools import tools_list
 
 giga = GigaChat(
     credentials=settings.GIGACHAT_API_KEY,
