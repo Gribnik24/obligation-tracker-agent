@@ -13,7 +13,7 @@
     "title": "Spotify Family",
     "amount": 16.99,
     "currency": "EUR",
-    "category": "entertainment",
+    "category": "subscription",
     "next_payment_date": "2026-07-28",
     "status": "active"
   },
@@ -22,7 +22,7 @@
     "title": "Fitnes Club",
     "amount": 4500.00,
     "currency": "RUB",
-    "category": "health",
+    "category": "sport",
     "next_payment_date": "2026-07-20",
     "status": "active"
   },
@@ -31,7 +31,7 @@
     "title": "Adobe Creative Cloud",
     "amount": 54.99,
     "currency": "USD",
-    "category": "software",
+    "category": "subscription",
     "next_payment_date": "2026-08-01",
     "status": "active"
   },
@@ -40,7 +40,7 @@
     "title": "iCloud Plus",
     "amount": 2.99,
     "currency": "USD",
-    "category": "utility",
+    "category": "subscription",
     "next_payment_date": "2026-07-22",
     "status": "active"
   },
@@ -76,7 +76,7 @@
     "title": "YouTube Premium",
     "amount": 17.99,
     "currency": "GBP",
-    "category": "entertainment",
+    "category": "subscription",
     "next_payment_date": "2026-07-21",
     "status": "active"
   },
@@ -85,7 +85,7 @@
     "title": "Car Insurance (Annual)",
     "amount": 1200.00,
     "currency": "EUR",
-    "category": "utility",
+    "category": "vehicle",
     "next_payment_date": "2026-08-15",
     "status": "inactive"
   },
@@ -100,10 +100,10 @@
   },
   {
     "id": "f2a3b4c5-d6e7-8901-fabc-012345678902",
-    "title": "Habr Pro",
-    "amount": 299.00,
+    "title": "Sberprime",
+    "amount": 399.00,
     "currency": "RUB",
-    "category": "entertainment",
+    "category": "subscription",
     "next_payment_date": "2026-07-24",
     "status": "active"
   },
@@ -121,7 +121,7 @@
     "title": "Premium Gym",
     "amount": 5500.00,
     "currency": "RUB",
-    "category": "health",
+    "category": "sport",
     "next_payment_date": "2026-07-20",
     "status": "inactive"
   },
@@ -130,7 +130,7 @@
     "title": "Japanese SaaS",
     "amount": 5000.00,
     "currency": "JPY",
-    "category": "software",
+    "category": "utility",
     "next_payment_date": "2026-07-27",
     "status": "active"
   }
