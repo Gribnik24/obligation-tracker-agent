@@ -1,6 +1,7 @@
 from datetime import datetime
 from zoneinfo import ZoneInfo
 import json
+import os
 import requests
 import numexpr
 from typing import Optional
@@ -30,23 +31,27 @@ def get_current_time(timezone: str = 'UTC') -> str:
         timezone: Имя часового пояса в формате IANA (например 'Europe/Moscow', 'Asia/Novosibirsk', 'UTC'). По умолчанию 'UTC'.
     Returns:
         Строка в формате JSON с полями:
-            `date`: дата в формате (YYYY-MM-DD) в указанном часовом поясе
-            `time`: время в формате (HH:MM:SS) в указанном часовом поясе
+            `date`: текущую дату в формате (YYYY-MM-DD) в указанном часовом поясе
+            `time`: текущее время в формате (HH:MM:SS) в указанном часовом поясе
+            `day_of_week`: текущий день недели в указанном часовом поясе
     """
     try:
         tz = ZoneInfo(timezone)
         now = datetime.now(tz)
-        result = {'date': now.strftime('%Y-%m-%d'), 'time': now.strftime('%H:%M:%S')}
+        result = {'date': now.strftime('%Y-%m-%d'),
+                  'time': now.strftime('%H:%M:%S'),
+                  'day_of_week': now.strftime('%A')
+                  }
         return json.dumps(result, ensure_ascii=False)
     except Exception:
         return json.dumps({'error': 'Ошибка получения текущего времени'}, ensure_ascii=False)
 
 
 @tool
-def get_obligations(currency=Optional[str],
-                    category=Optional[str],
-                    lower_date=Optional[str], upper_date=Optional[str],
-                    status=Optional[str]) -> str:
+def get_obligations(currency: Optional[str] = None,
+                    category: Optional[str] = None,
+                    lower_date: Optional[str] = None, upper_date:Optional[str] = None,
+                    status: Optional[str] = None) -> str:
     """
     Возвращает список финансовых обязательств пользователя.
     Args:
@@ -75,10 +80,11 @@ def get_obligations(currency=Optional[str],
             `status`: статус платежа
     """
     try:
-        data = json.load('../data/subscriptions.json')
-        result = []
+        data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data', 'subscriptions.json')
+        with open(data_dir, 'r', encoding='utf-8') as f:
+            data = json.load(f)
     except Exception as e:
-        return json.dumps({'error': 'Ошибка чтений файла с данными'}, ensure_ascii=False)
+        return json.dumps({'error': f'Ошибка чтений файла с данными {e}'}, ensure_ascii=False)
     
     # Создаем копию данных для фильтрации
     result = data.copy()
