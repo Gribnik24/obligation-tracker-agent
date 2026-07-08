@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends locales \
 
 ENV LANG=ru_RU.UTF-8
 ENV LC_ALL=ru_RU.UTF-8
+ENV PYTHONUTF8=1
 
 WORKDIR /app
 

@@ -1,8 +1,14 @@
 import json
+import sys
+import io
 from langchain_core.messages import HumanMessage
 
 from src.agent import agent, memory
 from config.logging_config import logger
+
+
+sys.stdin = io.TextIOWrapper(sys.stdin.buffer, encoding='utf-8')
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 
 def process_message(msg):
