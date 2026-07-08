@@ -3,11 +3,17 @@ from zoneinfo import ZoneInfo
 import json
 import os
 import requests
-import numexpr
 from typing import Optional
 from langchain_core.tools import tool
 import locale
-locale.setlocale(locale.LC_ALL, 'ru_RU')
+
+try:
+    locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
+except locale.Error:
+    try:
+        locale.setlocale(locale.LC_ALL, 'ru_RU')
+    except locale.Error:
+        pass  # fallback на системную локаль
 
 
 @tool
