@@ -2,6 +2,7 @@ import json
 from langchain_core.messages import HumanMessage
 
 from src.agent import agent, memory
+from config.logging_config import logger
 
 
 def process_message(msg):
@@ -13,11 +14,13 @@ def process_message(msg):
         # reasoning_content - внутренние рассуждения модели (если поддерживается)
         reasoning = msg.additional_kwargs.get('reasoning_content')
         if reasoning:
+            logger.info(f'[THOUGHT]: {msg.content}')
             print(f'[THOUGHT]: {reasoning}')
 
         # Если reasoning_content недоступен, но модель вернула текст перед вызовом
         # инструментов - это тоже её "мыслительный" шаг
         if msg.tool_calls and msg.content and msg.content.strip() and not reasoning:
+            logger.info(f'[THOUGHT]: {msg.content}')
             print(f'[THOUGHT]: {msg.content}')
 
         # ACTION
@@ -29,18 +32,22 @@ def process_message(msg):
                 else:
                     tool_name = getattr(tc, 'name', 'unknown')
                     tool_args = getattr(tc, 'args', {})
+                logger.info(f'[ACTION]: {tool_name}({json.dumps(tool_args, ensure_ascii=False)})')
                 print(f'[ACTION]: {tool_name}({json.dumps(tool_args, ensure_ascii=False)})')
 
         # FINAL ANSWER
         elif msg.content:
+            logger.info(f'[FINAL ANSWER]: {msg.content}')
             print(f'[FINAL ANSWER]: {msg.content}')
 
     # OBSERVATION
     elif msg_type == 'ToolMessage':
+        logger.info(f'[OBSERVATION]: {msg.content}')
         print(f'[OBSERVATION]: {msg.content}')
 
 
 def main():
+    logger.info('Старт работы агента')
     while True:
         # Обработка пользовательского запроса
         query = input("USER: ").strip()
@@ -71,6 +78,8 @@ def main():
                         process_message(msg)
         except Exception as e:
             print(f'[ERROR]: Ошибка при выполнении агента: {e}')
+            logger.error(f'[ERROR]: Ошибка при выполнении агента: {e}')
+    logger.info('Завершение работы агента')
 
 
 if __name__ == '__main__':
