@@ -2,10 +2,9 @@ from pydantic import Field
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-    GIGACHAT_API_KEY: str = Field(title='API ключ к модели GigaChat')
-    GIGACHAT_MODEL_NAME: str = Field(title='Название модели GigaChat')
-    GIGACHAT_BASE_URL: str = Field(title='Адрес API модели GigaChat')
-    GIGACHAT_VERIFY_SSL_CERTS: bool = Field(title='Необходимость проверки сертификатов')
+    MODEL_NAME: str = Field(title='Название модели')
+    MODEL_API_KEY: str = Field(title='API ключ к модели с OpenRouter')
+    MODEL_API_BASE: str = Field(title='Адрес API OpenRouter', default='https://openrouter.ai/api/v1')
     TEMPERATURE: float = Field(default=0, title='Температура модели')
     
     class Config:

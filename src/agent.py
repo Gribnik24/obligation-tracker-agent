@@ -1,4 +1,4 @@
-from langchain_gigachat.chat_models import GigaChat
+from langchain_openrouter.chat_models import ChatOpenRouter
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import StateGraph, MessagesState, START, END
 from langchain_core.messages import SystemMessage
@@ -8,16 +8,16 @@ from config.system_prompt import SYSTEM_PROMPT
 from config.settings import settings
 from src.tools import tools_list
 
-giga = GigaChat(
-    credentials=settings.GIGACHAT_API_KEY,
-    model=settings.GIGACHAT_MODEL_NAME,
-    temperature=settings.TEMPERATURE,
-    verify_ssl_certs=False
+llm = ChatOpenRouter(
+    model=settings.MODEL_NAME,
+    api_key=settings.MODEL_API_KEY,
+    base_url=settings.MODEL_API_BASE,
+    temperature=settings.TEMPERATURE
 )
 memory = MemorySaver()
 
 def make_agent_node(system_prompt: str, tools_list: list):
-    llm_with_tools = giga.bind_tools(tools_list, parallel_tool_calls=True)
+    llm_with_tools = llm.bind_tools(tools_list, parallel_tool_calls=True)
 
     def agent_node(state: MessagesState) -> dict:
         messages = [SystemMessage(content=system_prompt)] + state["messages"]
