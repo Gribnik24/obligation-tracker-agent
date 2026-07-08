@@ -6,29 +6,16 @@ import requests
 import numexpr
 from typing import Optional
 from langchain_core.tools import tool
-
-@tool
-def calculator(expression: str) -> str:
-    """
-    Кулькулятор. Инструмент для вычисления математических выражений
-    Args:
-        expression: математическое выражение (например '2+2')
-    Returns:
-        Строка в формате JSON с полями:
-            `answer`: ответ на математичесоке выражение
-    """
-    try:
-        return json.dumps({'answer': str(numexpr.evaluate(expression))})
-    except Exception as e:
-        return json.dumps({'error': 'Ошибка вычислений'}, ensure_ascii=False)
+import locale
+locale.setlocale(locale.LC_ALL, 'ru_RU')
 
 
 @tool
-def get_current_time(timezone: str = 'UTC') -> str:
+def get_current_time(timezone: str = 'Europe/Moscow') -> str:
     """
     Возвращает текущие дату и время для указанного часового пояса в формате IANA.
     Args:
-        timezone: Имя часового пояса в формате IANA (например 'Europe/Moscow', 'Asia/Novosibirsk', 'UTC'). По умолчанию 'UTC'.
+        timezone: Имя часового пояса в формате IANA (например 'Europe/Moscow', 'Asia/Novosibirsk', 'UTC'). По умолчанию 'Europe/Moscow'.
     Returns:
         Строка в формате JSON с полями:
             `date`: текущую дату в формате (YYYY-MM-DD) в указанном часовом поясе
@@ -43,8 +30,8 @@ def get_current_time(timezone: str = 'UTC') -> str:
                   'day_of_week': now.strftime('%A')
                   }
         return json.dumps(result, ensure_ascii=False)
-    except Exception:
-        return json.dumps({'error': 'Ошибка получения текущего времени'}, ensure_ascii=False)
+    except Exception as e:
+        return json.dumps({'error': f'Ошибка получения текущего времени: {e}'}, ensure_ascii=False)
 
 
 @tool
@@ -145,21 +132,21 @@ def convert_currency(amount: float, from_currency: str, to_currency: str) -> str
         
     """
     try:
-        url = 'https://api.frankfurter.app/latest/'
+        url = f'https://api.frankfurter.dev/v2/rates'
         params = {
-            'from': from_currency,
-            'to': to_currency.upper()
+            'base': from_currency.upper(),
+            'quotes': to_currency.upper()
         }
         response = requests.get(url, params)
-        data = response.json()
+        data = response.json()[0]
     except Exception as e:
-        return json.dumps({'error': 'Ошибка получения данных'}, ensure_ascii=False)
+        return json.dumps({'error': f'Ошибка получения данных: {e}'}, ensure_ascii=False)
     
-    to_currency_value = data.get('rates', {}).get(to_currency.upper(), None)
+    to_currency_value = data.get('rate', None)
     if to_currency_value is None:
-        return json.dumps({'error': 'Ошибка получения данных'}, ensure_ascii=False)
+        return json.dumps({'error': 'Ошибка получения данных:'}, ensure_ascii=False)
     
     return json.dumps({'need_currency_amount': str(to_currency_value * amount)}, ensure_ascii=False)
 
 
-tools_list = [calculator, get_current_time, get_obligations, convert_currency]
+tools_list = [get_current_time, get_obligations, convert_currency]
