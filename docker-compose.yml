@@ -1,0 +1,9 @@
+services:
+  agent:
+    build: .
+    container_name: obligation-tracker-agent
+    env_file: .env
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./data:/app/data
