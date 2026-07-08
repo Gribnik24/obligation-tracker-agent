@@ -47,11 +47,11 @@ def main():
         lw_query = query.lower()
 
         # Условие завершения диалога
-        if lw_query == '/exit':
+        if '/exit' in lw_query:
             break
 
         # Условие обнуления памяти
-        if lw_query == '/reset':
+        if '/reset' in lw_query:
             memory.delete_thread(thread_id='test_thread')
             continue
 
