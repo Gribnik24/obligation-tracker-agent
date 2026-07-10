@@ -1,0 +1,8 @@
+langchain-core==1.4.6
+langchain-openrouter==0.2.3
+langgraph==1.2.4
+pydantic
+pydantic-settings
+python-dotenv
+requests
+pytest
